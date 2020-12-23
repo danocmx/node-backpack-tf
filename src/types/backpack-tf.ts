@@ -3,17 +3,17 @@ import API from '../api';
 import ParamConstructor from '../param-constructor';
 import ResponseHandler from '../response-handler';
 
-import { IAPI } from './api';
+import { IAPI, RequestClient } from './api';
 
 import { DeleteListingsResponse } from './delete-listings';
 import { MyListingsResponse } from './my-listings';
 import { HeartbeatResponse } from './heartbeat';
-import { CreateListingsReponse } from './create-listings';
+import { CreateListingsResponse } from './create-listings';
 import { SearchResponse } from './search';
 
 export interface IResponseHandler {
     handleSearch(response: SearchResponse): any;
-    handleCreateListings(response: CreateListingsReponse): any;
+    handleCreateListings(response: CreateListingsResponse): any;
     handleMyListings(response: MyListingsResponse): any;
     handleHeartbeat(response: HeartbeatResponse): any;
     handleDeleteListings(response: DeleteListingsResponse): any;
@@ -32,6 +32,9 @@ export type BackpackTFOptions<T1 extends IAPI, T2 extends IResponseHandler, T3 e
     api: T1;
     responseHandler: T2;
     paramConstructor: T3;
+    request?: RequestClient;
+    apiKey?: string;
+    token?: string;
 }
 
 export type BPTF<T1 extends IAPI, T2 extends IResponseHandler, T3 extends IParamConstructor> = BackpackTF<T1, T2, T3>

@@ -1,6 +1,6 @@
 {
-  "name": "backpack-tf",
-  "version": "1.0.0",
+  "name": "@danocmx/backpack-tf",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
   }
 }

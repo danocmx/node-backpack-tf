@@ -1,3 +1,5 @@
-export default function <T>(data: T): T {
+import { HeartbeatResponse } from '../types/heartbeat';
+
+export default function (data: any): HeartbeatResponse {
 	return data;
 }

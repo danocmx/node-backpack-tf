@@ -1,4 +1,4 @@
-export type CreateListingsReponse = {
+export type CreateListingsResponse = {
     listings: {
         [item: string]: {
             created?: 1;

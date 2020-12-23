@@ -1,19 +1,22 @@
 import {
 	IAPI,
 	RequestOptions,
-	Request,
-	APIParams,
-	RequestifiedParams,
 	Credentials,
-    Method,
+	RequestClient,
+	Method,
 } from './types/api';
 
+/**
+ * @todo add ratelimiting
+ */
 class API implements IAPI {
-	private requesteer!: Request;
+	private requesteer!: RequestClient;
 	private apiKey?: string;
 	private token?: string;
 
-	constructor({ request, apiKey, token }: APIParams) {
+	set(
+		{ request, apiKey, token }: { apiKey?: string, request: RequestClient, token?: string }
+	) {
 		this.requesteer = request;
 		this.apiKey = apiKey;
 		this.token = token;
@@ -27,48 +30,32 @@ class API implements IAPI {
 	async request<T1, T2>(
 		method: Method,
 		endpoint: string,
-		options: RequestOptions<T1>
+		{ useToken, payload }: RequestOptions<T1>
 	): Promise<T2> {
-		const { data } = await this.requesteer.send<T2>({
-			method,
-			url: `https://backpack.tf/api/${endpoint}`,
-			...this.getRequestData(options),
-		});
-
-		return data;
-	}
-
-	/**
-	 * Chooses data to send with the request.
-	 */
-	getRequestData<T>({
-		useToken,
-		data,
-		params,
-	}: RequestOptions<T>): RequestifiedParams<T>|{} {
 		const credential: Credentials = useToken
 			? { token: this.token }
 			: { key: this.apiKey };
+		const url = `https://backpack.tf/api/${endpoint}`;
 
-		if (data) {
-			return {
+		if (method === 'POST' || method === 'DELETE') {
+			return this.requesteer.send<T2>({
+				method: 'POST',
+				url,
 				data: {
+					...payload,
 					...credential,
-					...data,
 				},
-			};
+			});
 		}
 
-		if (params) {
-			return {
-				params: {
-					...credential,
-					...params,
-				},
-			};
-		}
-
-		return {};
+		return this.requesteer.send<T2>({
+			method: 'GET',
+			url,
+			params: {
+				...payload,
+				...credential,
+			},
+		});
 	}
 }
 

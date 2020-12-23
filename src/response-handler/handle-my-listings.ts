@@ -1,3 +1,5 @@
-export default function <T>(data: T): T {
-	return data;
+import { MyListingsResponse } from '../types/my-listings';
+
+export default function (data: any): MyListingsResponse {
+	return data as MyListingsResponse;
 }
