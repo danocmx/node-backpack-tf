@@ -39,7 +39,7 @@ class API implements IAPI {
 
 		if (method === 'POST' || method === 'DELETE') {
 			return this.requesteer.send<T2>({
-				method: 'POST',
+				method,
 				url,
 				data: {
 					...payload,
