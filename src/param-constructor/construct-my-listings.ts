@@ -1,7 +1,7 @@
 export default function(params: { intent: 'buy'|'sell'|'all', inactive: boolean }) {
     return {
         intent: convertIntent(params.intent),
-        inactive: params.inactive ? 0 : 1,
+        inactive: params.inactive ? 1 : 0,
     }
 }
 
