@@ -1,11 +1,11 @@
 export type MyListingsParams = {
-  intent: "buy" | "sell";
-  inactive: true;
+  intent?: "buy" | "sell";
+  inactive: boolean;
 };
 
 export function constructMyListingParams(params: MyListingsParams) {
   return {
-    intent: convertIntent(params.intent),
+    intent: params.intent ? convertIntent(params.intent) : undefined,
     inactive: params.inactive ? 1 : 0,
   };
 }
