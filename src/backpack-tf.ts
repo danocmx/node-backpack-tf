@@ -35,8 +35,8 @@ export class BackpackTFAPI {
 
   constructor({
     requestClient = getAxiosRequest(),
-    apiKey = '',
-    token = '',
+    apiKey = "",
+    token = "",
   }: BackpackTFOptions) {
     this.requestClient = requestClient;
     this.apiKey = apiKey;

@@ -7,7 +7,7 @@ export type Inventory = {
     used: number;
     total: number;
   };
-}
+};
 
 export type BanReason = {
   end: number;
@@ -53,7 +53,7 @@ export type User = {
       created: number;
       accepted: number;
       accepted_unusual: number;
-    }
+    };
   };
   inventory?: {
     440?: Inventory;
@@ -63,9 +63,9 @@ export type User = {
   trust?: {
     positive?: number;
     negative?: number;
-  }
-}
+  };
+};
 
 export type UserInfoResponse = {
-  users: Record<string, User>
-}
+  users: Record<string, User>;
+};
