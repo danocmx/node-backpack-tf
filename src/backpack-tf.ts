@@ -24,19 +24,19 @@ import { getAxiosRequest } from "./request-client/axios";
 
 export type BackpackTFOptions = {
   requestClient?: RequestClient;
-  token: string;
-  apiKey: string;
+  token?: string;
+  apiKey?: string;
 };
 
-export class BackpackTF {
+export class BackpackTFAPI {
   private requestClient: RequestClient;
   private apiKey: string;
   private token: string;
 
   constructor({
     requestClient = getAxiosRequest(),
-    apiKey,
-    token,
+    apiKey = '',
+    token = '',
   }: BackpackTFOptions) {
     this.requestClient = requestClient;
     this.apiKey = apiKey;
