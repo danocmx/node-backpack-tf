@@ -1,10 +1,9 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-
-import { GetRequestOptions, PostAndDeleteRequestOptions, RequestClient } from '../types/api';
+import { ApiRequestParams, RequestClient } from './common';
 
 export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
     return {
-        async send<T>(options: GetRequestOptions|PostAndDeleteRequestOptions) {
+        async send<T>(options: ApiRequestParams) {
             try {
                 const { data } = await (instance ? instance(options) : axios(options));
 

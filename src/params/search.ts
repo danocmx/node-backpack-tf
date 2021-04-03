@@ -1,7 +1,41 @@
-import { SearchOptions, SearchRequestParams } from '../types/search';
+export type SearchParams = {
+  intent?: string;
+  pageSize?: number;
+  page?: number;
+  fold?: number;
+  item?: string;
+  steamid?: string;
+  quality?: number;
+  killstreak?: number;
+  craftable?: number;
+  australium?: number;
+  texture?: string;
+  itemType?: string;
+  wear?: number;
+  particle?: number;
+  elevated?: boolean;
+}
 
-export function constructSearch(params: SearchOptions): SearchRequestParams {
-    const itemBody: SearchRequestParams = {
+type SearchOutputParams = {
+  intent: string;
+  page_size: number;
+  page: number;
+  fold: number;
+  item?: string;
+  steamid?: string;
+  texture_name?: string;
+  wear_tier?: number;
+  elevated?: number;
+  item_type?: string;
+  quality?: number;
+  killstreak_tier?: number;
+  australium?: number;
+  craftable?: number;
+  particle?: number;
+}
+
+export function constructSearchParams(params: SearchParams): SearchOutputParams {
+    const itemBody: SearchOutputParams = {
         intent: params.intent || 'dual',
         page_size: params.pageSize || 30,
         page: params.page || 1,

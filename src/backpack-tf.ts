@@ -1,112 +1,114 @@
-import { IAPI } from './types/api';
-import {
-	IResponseHandler,
-	IParamConstructor,
-	BackpackTFOptions,
-} from './types/backpack-tf';
+import { RequestClient } from './request-client/common';
+import { constructMyListingParams, MyListingsParams } from './params/my-listings';
+import { constructSearchParams, SearchParams } from './params/search';
+import { constructDeleteListingsParams } from './params/delete-listings';
+import { constructCreateListingsParams, ListingParams } from './params/create-listings';
+import { MyListingsResponse } from './responses/my-listings';
+import { handleSearchResponse, SearchResponse, Search } from './responses/search';
+import { DeleteListingsResponse } from './responses/delete-listings';
+import { CreateListingsResponse } from './responses/create-listings';
+import { HeartbeatResponse } from './responses/heartbeat';
 
-import { DeleteListingsResponse } from './types/delete-listings';
-import { MyListingsResponse } from './types/my-listings';
-import { HeartbeatResponse } from './types/heartbeat';
-import { CreateListingsResponse } from './types/create-listings';
-import { SearchResponse } from './types/search';
-import { getAxiosRequest } from './request-client';
+export type BackpackTFOptions = {
+  requestClient: RequestClient;
+  token: string;
+  apiKey: string;
+};
 
-/**
- * @todo add more types and tools
- */
-class BackpackTF<
-	TAPI extends IAPI,
-	TRHandler extends IResponseHandler,
-	TConstructor extends IParamConstructor
-> {
-	public api: TAPI;
-	public responseHandler: TRHandler;
-	public paramConstructor: TConstructor;
+export class BackpackTF {
+  private requestClient: RequestClient;
+  private apiKey: string;
+  private token: string;
 
-	constructor({
-		api,
-		token,
-		apiKey,
-		request = getAxiosRequest(),
-		responseHandler,
-		paramConstructor,
-	}: BackpackTFOptions<TAPI, TRHandler, TConstructor>) {
-		this.api = api;
-		this.api.set({ token, apiKey, request });
-		this.responseHandler = responseHandler;
-		this.paramConstructor = paramConstructor;
-	}
+  constructor({ requestClient, apiKey, token }: BackpackTFOptions) {
+    this.requestClient = requestClient;
+    this.apiKey = apiKey;
+    this.token = token;
+  }
 
-	async searchClassifieds(
-		params: Parameters<TConstructor['constructSearch']>[0]
-	): Promise<ReturnType<TRHandler['handleSearch']>> {
-		const response = await this.api.request<
-			ReturnType<TConstructor['constructSearch']>,
-			SearchResponse
-		>('GET', 'classifieds/search/v1', {
-			useToken: false,
-			payload: this.paramConstructor.constructSearch(params),
-		});
+  private request<T>(
+    method: "GET" | "DELETE" | "POST",
+    path: string,
+    {
+      payload = {},
+      as = 'data',
+      auth = 'none'
+    }: {
+      payload?: Record<string, unknown>;
+      as?: 'data'|'params';
+      auth: 'key'|'token'|'none';
+    }
+  ) {
+    const payloadWithAuth = { ...payload };
+    if (auth === 'key') payloadWithAuth.key = this.apiKey;
+    else if (auth === 'token') payloadWithAuth.token = this.token;
 
-		return this.responseHandler.handleSearch(response);
-	}
+    return this.requestClient.send<T>({
+      method,
+      url: `https://backpack.tf/${path}`,
+      ...(as === 'data' ? { data: payloadWithAuth } : { params: payloadWithAuth }),
+    });
+  }
 
-	async createListings(
-		params: Parameters<TConstructor['constructCreateListings']>[0]
-	): Promise<ReturnType<TRHandler['handleCreateListings']>> {
-		const response = await this.api.request<
-			ReturnType<TConstructor['constructCreateListings']>,
-			CreateListingsResponse
-		>('POST', 'classifieds/list/v1', {
-			useToken: true,
-			payload: this.paramConstructor.constructCreateListings(params),
-		});
+  searchClassifieds(params: SearchParams): Promise<Search> {
+    return this.request<SearchResponse>(
+      "GET",
+      "classifieds/search/v1",
+      {
+        auth: 'key',
+        as: 'params',
+        payload: constructSearchParams(params)
+      }
+    ).then((response) => {
+      return handleSearchResponse(response);
+    });
+  }
 
-		return this.responseHandler.handleCreateListings(response);
-	}
+  createListings(listings: ListingParams[]): Promise<CreateListingsResponse> {
+    return this.request<CreateListingsResponse>(
+      "POST",
+      "classifieds/list/v1",
+      {
+        auth: "token",
+        payload: constructCreateListingsParams(listings),
+        as: 'data',
+      }
+    );
+  }
 
-	async deleteListings(
-		params: Parameters<TConstructor['constructDeleteListings']>[0]
-	): Promise<ReturnType<TRHandler['handleDeleteListings']>> {
-		const response = await this.api.request<
-			ReturnType<TConstructor['constructDeleteListings']>,
-			DeleteListingsResponse
-		>('DELETE', 'classifieds/delete/v1', {
-			useToken: true,
-			payload: this.paramConstructor.constructDeleteListings(params),
-		});
+  deleteListings(ids: string[]) {
+    return this.request<DeleteListingsResponse>(
+      'DELETE',
+      'classifieds/delete/v1',
+      {
+        auth: 'token',
+        payload: constructDeleteListingsParams(ids),
+        as: 'data'
+      }
+    )
+  }
 
-		return this.responseHandler.handleDeleteListings(response);
-	}
+  sendHeartbeat() {
+    return this.request<HeartbeatResponse>(
+      'POST',
+      'aux/heartbeat/v1',
+      {
+        auth: 'token',
+        payload: {},
+        as: 'params'
+      }
+    )
+  }
 
-	async sendHeartbeat(
-		params: Parameters<TConstructor['constructHeartbeat']>[0]
-	): Promise<ReturnType<TRHandler['handleHeartbeat']>> {
-		const response = await this.api.request<
-			ReturnType<TConstructor['constructHeartbeat']>,
-			HeartbeatResponse
-		>('POST', 'aux/heartbeat/v1', {
-			useToken: true,
-			payload: this.paramConstructor.constructHeartbeat(params),
-		});
-
-		return this.responseHandler.handleHeartbeat(response);
-	}
-
-	async getMyListings(
-		params: Parameters<TConstructor['constructMyListings']>[0]
-	): Promise<ReturnType<TRHandler['handleMyListings']>> {
-		const response = await this.api.request<
-			ReturnType<TConstructor['constructMyListings']>,
-			MyListingsResponse
-		>('GET', 'classifieds/listings/v1', {
-			useToken: true,
-			payload: this.paramConstructor.constructMyListings(params),
-		});
-
-		return this.responseHandler.handleMyListings(response);
-	}
+  getMyListings(params: MyListingsParams) {
+    return this.request<MyListingsResponse>(
+      'GET',
+      'classifieds/listings/v1',
+      {
+        auth: 'token',
+        payload: constructMyListingParams(params),
+        as: 'params'
+      }
+    )
+  }
 }
-
-export default BackpackTF;

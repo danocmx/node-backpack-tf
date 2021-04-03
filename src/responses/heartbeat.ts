@@ -1,3 +1,3 @@
 export type HeartbeatResponse = {
-    bumped: number;
+  bumped: number;
 }
