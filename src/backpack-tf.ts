@@ -116,7 +116,7 @@ export class BackpackTFAPI {
   }
 
   getUserInfo(params: UserInfoParams) {
-    return this.request<UserInfoResponse>("GET", "docs/user_info", {
+    return this.request<UserInfoResponse>("GET", "users/info/v1", {
       auth: "key",
       payload: constructUserInfoParams(params),
       as: "params",
