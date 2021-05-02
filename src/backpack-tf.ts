@@ -213,13 +213,13 @@ export class BackpackTFAPI {
     });
   }
 
-  markNotificationAsReadAndReturn() {
+  markNotificationsAsReadAndReturn() {
     return this.request<NotificationResponse[]>("POST", `notifications/unread`, {
       auth: "token",
     });
   }
 
-  markNotificationAsRead() {
+  markNotificationsAsRead() {
     return this.request<MarkAsReadNotificationsResponse>("POST", `notifications/mark`, {
       auth: "token",
     });

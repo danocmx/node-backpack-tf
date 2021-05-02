@@ -10,7 +10,8 @@ export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
         return data as T;
       } catch (e) {
         if (isAxiosError(e)) {
-          throw new Error(e?.response?.data.message || e.message);
+          const message: string = e?.response?.data.message || e.message;
+          throw new Error(`${options.method} ${options.url}: ${message}`);
         }
 
         throw e;
