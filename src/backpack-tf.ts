@@ -10,6 +10,12 @@ import {
   ListingParams,
 } from "./params/create-listings";
 import { constructUserInfoParams, UserInfoParams } from "./params/user-info";
+import {
+  constructCreateAlertParams,
+  constructDeleteAlertParams,
+  CreateAlertParams,
+  DeleteAlertParams,
+} from "./params/alerts";
 import { MyListingsResponse } from "./responses/my-listings";
 import {
   handleSearchResponse,
@@ -20,7 +26,17 @@ import { DeleteListingsResponse } from "./responses/delete-listings";
 import { CreateListingsResponse } from "./responses/create-listings";
 import { HeartbeatResponse } from "./responses/heartbeat";
 import { UserInfoResponse } from "./responses/user-info";
+import {
+  InventoryRefreshResponse,
+  InventoryStatusResponse,
+  InventoryValuesResponse,
+} from "./responses/inventory";
+import { ClientResponse } from "./responses/client";
+import { AgentStatus } from "./responses/agent";
 import { getAxiosRequest } from "./request-client/axios";
+import { AlertResponse, GetAlertsResponse } from "./responses/alerts";
+import { GetNotificationsResponse, MarkAsReadNotificationsResponse, NotificationResponse } from "./responses/notifications";
+import { constructCursorParams, CursorParams } from "./params/common";
 
 export type BackpackTFOptions = {
   requestClient?: RequestClient;
@@ -120,6 +136,128 @@ export class BackpackTFAPI {
       auth: "key",
       payload: constructUserInfoParams(params),
       as: "params",
+    });
+  }
+
+  getInventoryValues(steamId: string) {
+    return this.request<InventoryValuesResponse>(
+      "GET",
+      `inventory/${steamId}/values`,
+      {
+        auth: "token",
+      }
+    );
+  }
+
+  getInventoryStatus(steamId: string) {
+    return this.request<InventoryStatusResponse>(
+      "GET",
+      `inventory/${steamId}/status`,
+      {
+        auth: "token",
+      }
+    );
+  }
+
+  refreshInventory(steamId: string) {
+    return this.request<InventoryRefreshResponse>(
+      "POST",
+      `inventory/${steamId}/refresh`,
+      {
+        auth: "token",
+      }
+    );
+  }
+
+  getClient() {
+    return this.request<ClientResponse>("GET", "", {
+      auth: "token",
+    });
+  }
+
+  sendAgentPulse() {
+    return this.request<AgentStatus>("POST", `agent/pulse`, {
+      auth: "token",
+    });
+  }
+
+  stopAgent() {
+    return this.request<AgentStatus>("POST", `agent/stop`, {
+      auth: "token",
+    });
+  }
+
+  getAgentStatus() {
+    return this.request<AgentStatus>("POST", `agent/status`, {
+      auth: "token",
+    });
+  }
+
+  getNotification(id: string) {
+    return this.request<NotificationResponse>("GET", `notifications/${id}`, {
+      auth: "token",
+    });
+  }
+
+  deleteNotification(id: string) {
+    return this.request<AgentStatus>("DELETE", `notifications/${id}`, {
+      auth: "token",
+    });
+  }
+
+  getNotifications(cursor?: CursorParams) {
+    return this.request<GetNotificationsResponse>("GET", `notifications`, {
+      auth: "token",
+      payload: constructCursorParams(cursor),
+      as: 'params',
+    });
+  }
+
+  markNotificationAsReadAndReturn() {
+    return this.request<NotificationResponse[]>("POST", `notifications/unread`, {
+      auth: "token",
+    });
+  }
+
+  markNotificationAsRead() {
+    return this.request<MarkAsReadNotificationsResponse>("POST", `notifications/mark`, {
+      auth: "token",
+    });
+  }
+
+  getAlert(id: string) {
+    return this.request<AlertResponse>("GET", `classifieds/alerts/${id}`, {
+      auth: "token",
+    });
+  }
+
+  deleteAlert(id: string) {
+    return this.request<AgentStatus>("DELETE", `classifieds/alerts/${id}`, {
+      auth: "token",
+    });
+  }
+
+  getAlerts(cursor?: CursorParams) {
+    return this.request<GetAlertsResponse>("GET", `classifieds/alerts`, {
+      auth: "token",
+      payload: constructCursorParams(cursor),
+      as: 'params',
+    });
+  }
+
+  createAlert(params: CreateAlertParams) {
+    return this.request<AlertResponse>("POST", `classifieds/alerts`, {
+      auth: "token",
+      payload: constructCreateAlertParams(params),
+      as: "data",
+    });
+  }
+
+  deleteAlertByItem(params: DeleteAlertParams) {
+    return this.request<undefined>("DELETE", `classifieds/alerts`, {
+      auth: "token",
+      payload: constructDeleteAlertParams(params),
+      as: "data",
     });
   }
 }
