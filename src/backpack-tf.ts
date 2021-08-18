@@ -45,7 +45,7 @@ export type BackpackTFOptions = {
 };
 
 export class BackpackTFAPI {
-  private requestClient: RequestClient;
+  public requestClient: RequestClient;
   private apiKey: string;
   private token: string;
 
