@@ -3,6 +3,7 @@ export type ApiRequestParams = {
   url: string;
   params?: { [key: string]: any };
   data?: { [key: string]: any };
+  headers?: { [key: string]: any };
 };
 
 export type RequestClient = {
