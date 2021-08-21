@@ -1,18 +1,21 @@
 # backpack-tf
-A wrapper for backpack.tf api written in typescript. Dependencies are injected so you can handle everything yourself.
-Currently it is not complete and there's no documentation.
+Unopinionated typescript wrapper for backpack.tf API.
 
-## Use cases
-Use `createBPInstance` to get access to the API.
+## Instalation
+`npm install backpack.tf-api` or `yarn add backpack.tf-api`
 
-Methods:
-- `searchClassifieds`
-- `createListings`
-- `deleteListings`
-- `sendHeartbeat`
-- `getMyListings`
+## Usage
+```ts
+import { BackpackTFAPI } from 'backpack.tf-api';
 
-Options and returns are fully typed so no documentation here until the package is complete.
+const bptf = new BackpackTFAPI({
+  token: 'your backpack.tf token, optional if you dont need it',
+  apiKey: 'your backpack.tf api key, optional if you dont need it',
+  requestClient: /* request client implementation, optional */
+});
 
-## Warning
-A lot of things in this package are experimental and are subject to change in next major release.
+await bptf['/* api method you choose */']({ ...parameters });
+```
+
+## Api coverage
+Not all api's are implemented in this package, if there are some you require in your project, feel free to open a pull request. The request system is easy enough so you don't need to worry about the specifics, just the types.
