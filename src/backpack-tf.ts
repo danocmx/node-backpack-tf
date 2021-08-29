@@ -37,6 +37,8 @@ import { getAxiosRequest } from "./request-client/axios";
 import { AlertResponse, GetAlertsResponse } from "./responses/alerts";
 import { GetNotificationsResponse, MarkAsReadNotificationsResponse, NotificationResponse } from "./responses/notifications";
 import { constructCursorParams, CursorParams } from "./params/common";
+import { SnapshotResponse } from "./responses/snapshot";
+import { constructGetSnapshotParams, GetSnapshotParams } from "./params/snapshot";
 
 export type BackpackTFOptions = {
   requestClient?: RequestClient;
@@ -258,6 +260,20 @@ export class BackpackTFAPI {
       auth: "token",
       payload: constructDeleteAlertParams(params),
       as: "data",
+    });
+  }
+
+  /**
+   * Retrieves listing snapshot from backpack.tf cached api.
+   * @param params.sku full item name used by backpack.tf as a caching key
+   * @param params.skip how many listings you want to skip
+   * @return snapshot
+   */
+  getListingSnapshot(params: GetSnapshotParams) {
+    return this.request<SnapshotResponse>("GET", `classifieds/listings/snapshot`, {
+      auth: 'token',
+      payload: constructGetSnapshotParams(params),
+      as: 'params'
     });
   }
 }
