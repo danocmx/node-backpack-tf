@@ -1,4 +1,4 @@
-import { ApiResponse } from "./common"
+import { ApiResponse } from './common';
 
 export type AlertResponse = {
   id: string;
@@ -10,6 +10,6 @@ export type AlertResponse = {
   min?: number;
   max?: number;
   currency?: string;
-}
+};
 
 export type GetAlertsResponse = ApiResponse<AlertResponse>;

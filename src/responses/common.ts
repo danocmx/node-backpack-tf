@@ -48,7 +48,7 @@ export type SellOrderItem = OrderItem & {
 };
 
 export type BuyOrderItem = OrderItem & {
-  "user-id": string;
+  'user-id': string;
 };
 
 export type Attributes = {
@@ -61,9 +61,9 @@ export type Cursor = {
   skip: number;
   limit: number;
   total: number;
-}
+};
 
 export type ApiResponse<T> = {
   results: T[];
   cursor: Cursor;
-}
+};

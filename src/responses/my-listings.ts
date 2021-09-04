@@ -1,4 +1,4 @@
-import { BuyListing, SellListing } from "./common";
+import { BuyListing, SellListing } from './common';
 
 export type MyListingsResponse = {
   cap: number;

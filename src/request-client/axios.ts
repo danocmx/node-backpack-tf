@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
-import { ApiRequestParams, RequestClient } from "./common";
+import axios, { AxiosInstance, AxiosError } from 'axios';
+import { ApiRequestParams, RequestClient } from './common';
 
 export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
   return {
@@ -21,5 +21,5 @@ export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
 }
 
 function isAxiosError(err: Error | AxiosError): err is AxiosError {
-  return Object.prototype.hasOwnProperty.call(err, "isAxiosError");
+  return Object.prototype.hasOwnProperty.call(err, 'isAxiosError');
 }

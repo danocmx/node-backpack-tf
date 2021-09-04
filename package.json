@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "keywords": [],
   "author": "danocmx",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@semantic-release/git": "^9.0.0",
     "cz-conventional-changelog": "^3.3.0",
+    "prettier": "^2.3.2",
     "semantic-release": "^17.3.0",
     "typescript": "^4.0.2"
   },

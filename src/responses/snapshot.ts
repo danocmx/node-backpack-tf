@@ -1,5 +1,5 @@
-import { Intent } from "../common";
-import { Attributes, Currencies } from "./common";
+import { Intent } from '../common';
+import { Attributes, Currencies } from './common';
 
 export type SnapshotResponse = {
   id: null;
@@ -23,7 +23,7 @@ export type SnapshotListing = {
   userAgent?: {
     lastPulse: number;
     client: string | '-';
-  }
+  };
 };
 
 export type SnapshotItem = {

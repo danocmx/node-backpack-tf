@@ -1,5 +1,5 @@
 export type MyListingsParams = {
-  intent?: "buy" | "sell";
+  intent?: 'buy' | 'sell';
   inactive: boolean;
 };
 
@@ -12,9 +12,9 @@ export function constructMyListingParams(params: MyListingsParams) {
 
 function convertIntent(intent: string): number | undefined {
   switch (intent) {
-    case "sell":
+    case 'sell':
       return 1;
-    case "buy":
+    case 'buy':
       return 0;
     default:
       return undefined;

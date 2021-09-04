@@ -5,7 +5,7 @@ export type ClientResponse = {
     avatar: string;
     premium: boolean;
   };
-  authMethod: string | "session" | "token";
+  authMethod: string | 'session' | 'token';
   description: string[];
   authMethods: Record<string, string>;
 };

@@ -5,7 +5,7 @@ import {
   Listing,
   SellOrderItem,
   BuyOrderItem,
-} from "./common";
+} from './common';
 
 export type SearchResponse = {
   message?: string;

@@ -35,10 +35,10 @@ type SearchOutputParams = {
 };
 
 export function constructSearchParams(
-  params: SearchParams
+  params: SearchParams,
 ): SearchOutputParams {
   const itemBody: SearchOutputParams = {
-    intent: params.intent || "dual",
+    intent: params.intent || 'dual',
     page_size: params.pageSize || 30,
     page: params.page || 1,
     fold: params.fold || 1,

@@ -1,5 +1,5 @@
 export type ListingParams = {
-  intent: "sell" | "buy";
+  intent: 'sell' | 'buy';
   id?: string;
   item?: {
     quality: string | number;
@@ -25,7 +25,7 @@ export function constructCreateListingsParams(listings: ListingParams[]) {
       promoted: listing.promoted ? 1 : 0,
       details: listing.details,
       currencies: listing.currencies,
-      ...(listing.intent === "buy"
+      ...(listing.intent === 'buy'
         ? {
             intent: 0,
             item: listing.item && {

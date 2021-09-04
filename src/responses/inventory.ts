@@ -4,12 +4,12 @@ export type InventoryStatusResponse = {
   timestampt: number;
   next_update: number;
   refresh_interval: number;
-}
+};
 
 export type InventoryValuesResponse = {
   market_value: number;
   value: number;
-}
+};
 
 export type InventoryRefreshResponse = {
   current_time: number;
@@ -17,4 +17,4 @@ export type InventoryRefreshResponse = {
   timestampt: number;
   next_update: number;
   refresh_interval: number;
-}
+};
