@@ -1,6 +1,6 @@
 export type CursorParams = {
-  skip: number;
-  limit: number;
+  skip?: number;
+  limit?: number;
 }
 
 export function constructCursorParams(params?: CursorParams) {

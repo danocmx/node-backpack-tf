@@ -56,3 +56,14 @@ export type Attributes = {
   defindex: number;
   value?: number | string;
 };
+
+export type Cursor = {
+  skip: number;
+  limit: number;
+  total: number;
+}
+
+export type ApiResponse<T> = {
+  results: T[];
+  cursor: Cursor;
+}

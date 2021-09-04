@@ -1,5 +1,5 @@
 export type ApiRequestParams = {
-  method: "GET" | "POST" | "DELETE";
+  method: "GET" | "POST" | "DELETE" | "PATCH";
   url: string;
   params?: { [key: string]: any };
   data?: { [key: string]: any };

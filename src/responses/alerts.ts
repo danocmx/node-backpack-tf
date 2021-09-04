@@ -1,4 +1,4 @@
-import { Cursor } from "../common"
+import { ApiResponse } from "./common"
 
 export type AlertResponse = {
   id: string;
@@ -12,7 +12,4 @@ export type AlertResponse = {
   currency?: string;
 }
 
-export type GetAlertsResponse = {
-  results: AlertResponse[];
-  cursor: Cursor;
-}
+export type GetAlertsResponse = ApiResponse<AlertResponse>;

@@ -22,6 +22,11 @@ import {
   SearchResponse,
   Search,
 } from "./responses/search";
+import {
+  constructGetSnapshotParams,
+  GetSnapshotParams,
+} from "./params/snapshot";
+import { constructDeleteAllListingsParams, UpdateListing } from "./params/classifieds-v2";
 import { DeleteListingsResponse } from "./responses/delete-listings";
 import { CreateListingsResponse } from "./responses/create-listings";
 import { HeartbeatResponse } from "./responses/heartbeat";
@@ -35,10 +40,15 @@ import { ClientResponse } from "./responses/client";
 import { AgentStatus } from "./responses/agent";
 import { getAxiosRequest } from "./request-client/axios";
 import { AlertResponse, GetAlertsResponse } from "./responses/alerts";
-import { GetNotificationsResponse, MarkAsReadNotificationsResponse, NotificationResponse } from "./responses/notifications";
+import {
+  GetNotificationsResponse,
+  MarkAsReadNotificationsResponse,
+  NotificationResponse,
+} from "./responses/notifications";
 import { constructCursorParams, CursorParams } from "./params/common";
 import { SnapshotResponse } from "./responses/snapshot";
-import { constructGetSnapshotParams, GetSnapshotParams } from "./params/snapshot";
+import { DeleteAllListingsResponse, DeleteListingArchiveResponse, GetListingArchiveResponse, V2Listing } from "./responses/classifieds-v2";
+import { Intent } from "./common";
 
 export type BackpackTFOptions = {
   requestClient?: RequestClient;
@@ -62,7 +72,7 @@ export class BackpackTFAPI {
   }
 
   private request<T>(
-    method: "GET" | "DELETE" | "POST",
+    method: "GET" | "DELETE" | "POST" | 'PATCH',
     path: string,
     {
       payload = {},
@@ -211,20 +221,28 @@ export class BackpackTFAPI {
     return this.request<GetNotificationsResponse>("GET", `notifications`, {
       auth: "token",
       payload: constructCursorParams(cursor),
-      as: 'params',
+      as: "params",
     });
   }
 
   markNotificationsAsReadAndReturn() {
-    return this.request<NotificationResponse[]>("POST", `notifications/unread`, {
-      auth: "token",
-    });
+    return this.request<NotificationResponse[]>(
+      "POST",
+      `notifications/unread`,
+      {
+        auth: "token",
+      }
+    );
   }
 
   markNotificationsAsRead() {
-    return this.request<MarkAsReadNotificationsResponse>("POST", `notifications/mark`, {
-      auth: "token",
-    });
+    return this.request<MarkAsReadNotificationsResponse>(
+      "POST",
+      `notifications/mark`,
+      {
+        auth: "token",
+      }
+    );
   }
 
   getAlert(id: string) {
@@ -243,7 +261,7 @@ export class BackpackTFAPI {
     return this.request<GetAlertsResponse>("GET", `classifieds/alerts`, {
       auth: "token",
       payload: constructCursorParams(cursor),
-      as: 'params',
+      as: "params",
     });
   }
 
@@ -270,10 +288,140 @@ export class BackpackTFAPI {
    * @return snapshot
    */
   getListingSnapshot(params: GetSnapshotParams) {
-    return this.request<SnapshotResponse>("GET", `classifieds/listings/snapshot`, {
-      auth: 'token',
-      payload: constructGetSnapshotParams(params),
-      as: 'params'
-    });
+    return this.request<SnapshotResponse>(
+      "GET",
+      `classifieds/listings/snapshot`,
+      {
+        auth: "token",
+        payload: constructGetSnapshotParams(params),
+        as: "params",
+      }
+    );
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  // V2 Classifieds API
+  //////////////////////////////////////////////////////////////////////////////////////
+
+  getListingArchive(cursor?: CursorParams) {
+    return this.request<GetListingArchiveResponse>(
+      "GET",
+      `v2/classifieds/archive`,
+      {
+        auth: "token",
+        payload: constructCursorParams(cursor),
+        as: "params",
+      }
+    );
+  }
+
+  deleteListingArchive() {
+    return this.request<DeleteListingArchiveResponse>(
+      "DELETE",
+      `v2/classifieds/archive`,
+      {
+        auth: "token",
+      }
+    );
+  }
+
+  getArchivedListing(id: string) {
+    return this.request<V2Listing>(
+      "GET",
+      `v2/classifieds/archive/${id}`,
+      {
+        auth: "token",
+      }
+    ); 
+  }
+
+  deleteArchivedListing(id: string) {
+    return this.request<undefined>(
+      "DELETE",
+      `v2/classifieds/archive/${id}`,
+      {
+        auth: "token",
+      }
+    ); 
+  }
+
+  updateArchivedListing(id: string, params: UpdateListing) {
+    return this.request<V2Listing>(
+      "PATCH",
+      `v2/classifieds/archive/${id}`,
+      {
+        auth: "token",
+        payload: params,
+        as: 'data'
+      }
+    ); 
+  }
+
+  /**
+   * Publish one archived listing to the active pool
+   * @param id listing id
+   */
+  publishArchivedListing(id: string) {
+    return this.request<undefined>(
+      "POST",
+      `v2/classifieds/archive/${id}/publish`,
+      {
+        auth: "token",
+      }
+    ); 
+  }
+
+  deleteAllListings(intent?: Intent) {
+    return this.request<DeleteAllListingsResponse>(
+      "DELETE",
+      `v2/classifieds/listings`,
+      {
+        auth: "token",
+        payload: constructDeleteAllListingsParams(intent),
+        as: 'data'
+      }
+    ); 
+  }
+
+  getListing(id: string) {
+    return this.request<V2Listing>(
+      "GET",
+      `v2/classifieds/listings/${id}`,
+      {
+        auth: "token",
+      }
+    ); 
+  }
+
+  deleteListing(id: string) {
+    return this.request<V2Listing>(
+      "DELETE",
+      `v2/classifieds/listings/${id}`,
+      {
+        auth: "token",
+      }
+    ); 
+  }
+
+  updateListing(id: string, params: UpdateListing) {
+    return this.request<V2Listing>(
+      "PATCH",
+      `v2/classifieds/listings/${id}`,
+      {
+        auth: "token",
+        payload: params,
+        as: 'data'
+      }
+    ); 
+  }
+
+  archiveListing(id: string) {
+    return this.request<undefined>(
+      "POST",
+      `v2/classifieds/listings/${id}/archive`,
+      {
+        auth: "token",
+      }
+    ); 
   }
 }

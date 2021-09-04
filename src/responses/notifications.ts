@@ -1,4 +1,4 @@
-import { Cursor } from "../common"
+import { ApiResponse } from './common'
 
 export type NotificationResponse = {
   id: string;
@@ -18,10 +18,7 @@ export type NotificationResponse = {
   }
 }
 
-export type GetNotificationsResponse = {
-  results: NotificationResponse[];
-  cursor: Cursor;
-}
+export type GetNotificationsResponse = ApiResponse<NotificationResponse>;
 
 export type MarkAsReadNotificationsResponse = {
   modified: number;
