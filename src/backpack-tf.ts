@@ -6,6 +6,7 @@ import {
 import { constructSearchParams, SearchParams } from './params/search';
 import { constructDeleteListingsParams } from './params/delete-listings';
 import {
+  constructCreateListingParams,
   constructCreateListingsParams,
   ListingParams,
 } from './params/create-listings';
@@ -87,21 +88,33 @@ export class BackpackTFAPI {
       as = 'data',
       auth = 'none',
     }: {
-      payload?: Record<string, unknown>;
+      payload?: Record<string, unknown> | Array<any>;
       as?: 'data' | 'params';
       auth: 'key' | 'token' | 'none';
     },
   ) {
-    const payloadWithAuth = { ...payload };
-    if (auth === 'key') payloadWithAuth.key = this.apiKey;
-    else if (auth === 'token') payloadWithAuth.token = this.token;
+    if (!Array.isArray(payload)) {
+      if (auth === 'key') payload.key = this.apiKey;
+      else if (auth === 'token') payload.token = this.token;
+
+      return this.requestClient.send<T>({
+        method,
+        url: `https://backpack.tf/api/${path}`,
+        ...(as === 'data'
+          ? { data: payload }
+          : { params: payload }),
+      });
+    }
+
+    const authQuery: Record<string, string> = {};
+    if (auth === 'key') authQuery.key = this.apiKey;
+    else if (auth === 'token') authQuery.token = this.token;
 
     return this.requestClient.send<T>({
       method,
       url: `https://backpack.tf/api/${path}`,
-      ...(as === 'data'
-        ? { data: payloadWithAuth }
-        : { params: payloadWithAuth }),
+      data: payload,
+      params: authQuery,
     });
   }
 
@@ -385,6 +398,14 @@ export class BackpackTFAPI {
     });
   }
 
+  createListing(params: ListingParams) {
+    return this.request<V2Listing>('POST', 'v2/classifieds/listings', {
+      auth: 'token',
+      payload: constructCreateListingParams(params),
+      as: 'data'
+    });
+  }
+
   deleteListing(id: string) {
     return this.request<V2Listing>('DELETE', `v2/classifieds/listings/${id}`, {
       auth: 'token',
@@ -407,5 +428,24 @@ export class BackpackTFAPI {
         auth: 'token',
       },
     );
+  }
+
+  /**
+   * New V2 api for creating multiple listings in one request.
+   */
+  createListingsBatch(params: ListingParams[]) {
+    return this.request<V2Listing[]>('POST', 'v2/classifieds/listings/batch', {
+      auth: 'token',
+      payload: params.map(constructCreateListingParams),
+      as: 'data'
+    });
+  }
+
+  deleteListingsBatch(ids: string[]) {
+    return this.request<V2Listing[]>('POST', 'v2/classifieds/listings/batch', {
+      auth: 'token',
+      payload: ids,
+      as: 'data'
+    });
   }
 }

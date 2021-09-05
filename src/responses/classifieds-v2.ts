@@ -13,7 +13,7 @@ export type V2Listing = {
   promoted: boolean;
   listedAt: number;
   bumpedAt: number;
-  status: 'hiddenByUser' | 'active';
+  status: 'hiddenByUser' | 'active' | 'notEnoughCurrency';
   archived: boolean;
   count: number;
   buyoutOnly: boolean;
