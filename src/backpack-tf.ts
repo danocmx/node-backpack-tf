@@ -421,7 +421,7 @@ export class BackpackTFAPI {
   }
 
   archiveListing(id: string) {
-    return this.request<undefined>(
+    return this.request<V2Listing>(
       'POST',
       `v2/classifieds/listings/${id}/archive`,
       {
@@ -447,5 +447,25 @@ export class BackpackTFAPI {
       payload: ids,
       as: 'data'
     });
+  }
+
+  promoteListing(id: string) {
+    return this.request<V2Listing>(
+      'POST',
+      `v2/classifieds/listings/${id}/promote`,
+      {
+        auth: 'token',
+      },
+    );
+  }
+
+  demoteListing(id: string) {
+    return this.request<V2Listing>(
+      'POST',
+      `v2/classifieds/listings/${id}/demote`,
+      {
+        auth: 'token',
+      },
+    );
   }
 }
