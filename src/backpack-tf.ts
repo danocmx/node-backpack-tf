@@ -6,8 +6,8 @@ import {
 import { constructSearchParams, SearchParams } from './params/search';
 import { constructDeleteListingsParams } from './params/delete-listings';
 import {
-  constructCreateListingParams,
   constructCreateListingsParams,
+  constructV2CreateListingParams,
   ListingParams,
 } from './params/create-listings';
 import { constructUserInfoParams, UserInfoParams } from './params/user-info';
@@ -401,7 +401,7 @@ export class BackpackTFAPI {
   createListing(params: ListingParams) {
     return this.request<V2Listing>('POST', 'v2/classifieds/listings', {
       auth: 'token',
-      payload: constructCreateListingParams(params),
+      payload: constructV2CreateListingParams(params),
       as: 'data'
     });
   }
@@ -436,7 +436,7 @@ export class BackpackTFAPI {
   createListingsBatch(params: ListingParams[]) {
     return this.request<V2Listing[]>('POST', 'v2/classifieds/listings/batch', {
       auth: 'token',
-      payload: params.map(constructCreateListingParams),
+      payload: params.map(constructV2CreateListingParams),
       as: 'data'
     });
   }
