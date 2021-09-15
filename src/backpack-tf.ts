@@ -57,6 +57,7 @@ import {
   GetListingArchiveResponse,
   V2Listing,
 } from './responses/classifieds-v2';
+import { LimitsResponse } from './responses/limits';
 import { Intent } from './common';
 
 export type BackpackTFOptions = {
@@ -463,6 +464,16 @@ export class BackpackTFAPI {
     return this.request<V2Listing>(
       'POST',
       `v2/classifieds/listings/${id}/demote`,
+      {
+        auth: 'token',
+      },
+    );
+  }
+
+  getListingLimits() {
+    return this.request<LimitsResponse>(
+      'GET',
+      `classifieds/limits`,
       {
         auth: 'token',
       },
