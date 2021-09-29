@@ -88,34 +88,44 @@ export class BackpackTFAPI {
       payload = {},
       as = 'data',
       auth = 'none',
+      authAs = 'query',
     }: {
       payload?: Record<string, unknown> | Array<any>;
       as?: 'data' | 'params';
       auth: 'key' | 'token' | 'none';
+      authAs?: 'query' | 'append';
     },
   ) {
-    if (!Array.isArray(payload)) {
-      if (auth === 'key') payload.key = this.apiKey;
-      else if (auth === 'token') payload.token = this.token;
+    const authStore: Record<string, string> = {};
+    if (auth === 'key') authStore.key = this.apiKey;
+    else if (auth === 'token') authStore.token = this.token;
 
+    if (Array.isArray(payload) || (as === 'data' && authAs !== 'append')) {
+      return this.requestClient.send<T>({
+        method,
+        url: `https://backpack.tf/api/${path}`,
+        data: payload,
+        params: authStore,
+      });
+    }
+
+    if (authAs === 'append') {
       return this.requestClient.send<T>({
         method,
         url: `https://backpack.tf/api/${path}`,
         ...(as === 'data'
-          ? { data: payload }
-          : { params: payload }),
+          ? { data: { ...payload, ...authStore } }
+          : { params: { ...payload, ...authStore }  }),
       });
     }
-
-    const authQuery: Record<string, string> = {};
-    if (auth === 'key') authQuery.key = this.apiKey;
-    else if (auth === 'token') authQuery.token = this.token;
 
     return this.requestClient.send<T>({
       method,
       url: `https://backpack.tf/api/${path}`,
-      data: payload,
-      params: authQuery,
+      params: {
+        ...payload,
+        ...authStore,
+      }
     });
   }
 
@@ -134,6 +144,7 @@ export class BackpackTFAPI {
       auth: 'token',
       payload: constructCreateListingsParams(listings),
       as: 'data',
+      authAs: 'append',
     });
   }
 
@@ -145,6 +156,7 @@ export class BackpackTFAPI {
         auth: 'token',
         payload: constructDeleteListingsParams(ids),
         as: 'data',
+        authAs: 'append',
       },
     );
   }
