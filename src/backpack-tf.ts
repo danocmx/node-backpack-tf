@@ -56,6 +56,7 @@ import {
   DeleteListingArchiveResponse,
   GetListingArchiveResponse,
   V2Listing,
+  CreateListingBatchResponse,
 } from './responses/classifieds-v2';
 import { LimitsResponse } from './responses/limits';
 import { Intent } from './common';
@@ -447,7 +448,7 @@ export class BackpackTFAPI {
    * New V2 api for creating multiple listings in one request.
    */
   createListingsBatch(params: ListingParams[]) {
-    return this.request<V2Listing[]>('POST', 'v2/classifieds/listings/batch', {
+    return this.request<CreateListingBatchResponse>('POST', 'v2/classifieds/listings/batch', {
       auth: 'token',
       payload: params.map(constructV2CreateListingParams),
       as: 'data'

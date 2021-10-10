@@ -47,3 +47,18 @@ export type DeleteListingArchiveResponse = {
 export type DeleteAllListingsResponse = {
   deleted: number;
 };
+
+export type FailedCreateListingResponse = {
+  error: {
+    message: string;
+  };
+};
+
+export type SuccessCreateListingResponse = {
+  result: V2Listing;
+};
+
+export type CreateListingBatchResponse = (
+  | FailedCreateListingResponse
+  | SuccessCreateListingResponse
+)[];
