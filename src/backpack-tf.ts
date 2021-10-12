@@ -54,7 +54,7 @@ import { SnapshotResponse } from './responses/snapshot';
 import {
   DeleteAllListingsResponse,
   DeleteListingArchiveResponse,
-  GetListingArchiveResponse,
+  GetListingsResponse,
   V2Listing,
   CreateListingBatchResponse,
 } from './responses/classifieds-v2';
@@ -339,7 +339,7 @@ export class BackpackTFAPI {
   //////////////////////////////////////////////////////////////////////////////////////
 
   getListingArchive(cursor?: CursorParams) {
-    return this.request<GetListingArchiveResponse>(
+    return this.request<GetListingsResponse>(
       'GET',
       `v2/classifieds/archive`,
       {
@@ -489,6 +489,18 @@ export class BackpackTFAPI {
       `classifieds/limits`,
       {
         auth: 'token',
+      },
+    );
+  }
+
+  getListings(cursor?: CursorParams) {
+    return this.request<GetListingsResponse>(
+      'GET',
+      `v2/classifieds/listings`,
+      {
+        auth: 'token',
+        payload: constructCursorParams(cursor),
+        as: 'params',
       },
     );
   }

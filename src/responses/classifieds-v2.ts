@@ -38,7 +38,7 @@ export type V2Listing = {
   };
 };
 
-export type GetListingArchiveResponse = ApiResponse<V2Listing>;
+export type GetListingsResponse = ApiResponse<V2Listing>;
 
 export type DeleteListingArchiveResponse = {
   deleted: number;
