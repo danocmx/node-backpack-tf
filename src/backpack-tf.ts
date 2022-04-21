@@ -104,7 +104,7 @@ export class BackpackTFAPI {
     if (Array.isArray(payload) || (as === 'data' && authAs !== 'append')) {
       return this.requestClient.send<T>({
         method,
-        url: `https://backpack.tf/api/${path}`,
+        url: `https://api.backpack.tf/api/${path}`,
         data: payload,
         params: authStore,
       });
@@ -113,7 +113,7 @@ export class BackpackTFAPI {
     if (authAs === 'append') {
       return this.requestClient.send<T>({
         method,
-        url: `https://backpack.tf/api/${path}`,
+        url: `https://api.backpack.tf/api/${path}`,
         ...(as === 'data'
           ? { data: { ...payload, ...authStore } }
           : { params: { ...payload, ...authStore }  }),
@@ -122,7 +122,7 @@ export class BackpackTFAPI {
 
     return this.requestClient.send<T>({
       method,
-      url: `https://backpack.tf/api/${path}`,
+      url: `https://api.backpack.tf/api/${path}`,
       params: {
         ...payload,
         ...authStore,
