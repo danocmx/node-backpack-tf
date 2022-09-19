@@ -8,9 +8,9 @@ export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
         const { data } = await (instance ? instance(options) : axios(options));
 
         return data as T;
-      } catch (e) {
-        if (isAxiosError(e)) {
-          const message: string = e?.response?.data.message || e.message;
+      } catch (e: unknown) {
+        if (isAxiosError<{ message?: string }>(e)) {
+          const message: string = e?.response?.data?.message || e.message;
           throw new Error(`${options.method} ${options.url}: ${message}`);
         }
 
@@ -20,6 +20,6 @@ export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
   };
 }
 
-function isAxiosError(err: Error | AxiosError): err is AxiosError {
+function isAxiosError<TResponse>(err: unknown | AxiosError<TResponse>): err is AxiosError<TResponse> {
   return Object.prototype.hasOwnProperty.call(err, 'isAxiosError');
 }
