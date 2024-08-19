@@ -14,13 +14,14 @@
   "license": "MIT",
   "devDependencies": {
     "@semantic-release/git": "^9.0.0",
+    "@types/node": "^22.4.1",
     "cz-conventional-changelog": "^3.3.0",
     "prettier": "^2.3.2",
     "semantic-release": "^21.0.1",
-    "typescript": "^4.0.2"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "axios": "^0.28.0"
+    "axios": "^1.7.4"
   },
   "repository": {
     "type": "git",
