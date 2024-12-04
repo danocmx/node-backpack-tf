@@ -470,7 +470,7 @@ export class BackpackTFAPI {
    * Does not support archived listings.
    */
   updateListingsBatch(params: UpdateListingParam[]) {
-    return this.request<UpdateListingBatchResponse[]>('PATCH', 'v2/classifieds/listings/batch', {
+    return this.request<UpdateListingBatchResponse>('PATCH', 'v2/classifieds/listings/batch', {
       auth: 'token',
       payload: params,
       as: 'params'
