@@ -19,6 +19,7 @@ export type V2Listing = {
   buyoutOnly: boolean;
   tradeOffersPreferred: boolean;
   item: {
+    id?: string;
     australium: boolean;
     baseName: string;
     appid: number;
