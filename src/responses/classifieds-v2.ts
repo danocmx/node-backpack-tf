@@ -19,6 +19,7 @@ export type V2Listing = {
   buyoutOnly: boolean;
   tradeOffersPreferred: boolean;
   item: {
+    id?: string;
     australium: boolean;
     baseName: string;
     appid: number;
@@ -62,3 +63,18 @@ export type CreateListingBatchResponse = (
   | FailedCreateListingResponse
   | SuccessCreateListingResponse
 )[];
+
+export type UpdateListingBatchResponse = {
+  errors: UpdateListingBatchError[];
+  updated: V2Listing[];
+};
+
+export type UpdateListingBatchError = {
+  index: number;
+  id: string;
+  message: string;
+};
+
+export type GetBatchOperationLimitResponse = {
+  opLimit: number;
+};

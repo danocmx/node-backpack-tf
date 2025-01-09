@@ -30,6 +30,7 @@ import {
 import {
   constructDeleteAllListingsParams,
   UpdateListing,
+  UpdateListingParam,
 } from './params/classifieds-v2';
 import { DeleteListingsResponse } from './responses/delete-listings';
 import { CreateListingsResponse } from './responses/create-listings';
@@ -57,6 +58,8 @@ import {
   GetListingsResponse,
   V2Listing,
   CreateListingBatchResponse,
+  UpdateListingBatchResponse,
+  GetBatchOperationLimitResponse,
 } from './responses/classifieds-v2';
 import { LimitsResponse } from './responses/limits';
 import { Intent } from './common';
@@ -452,6 +455,25 @@ export class BackpackTFAPI {
       auth: 'token',
       payload: params.map(constructV2CreateListingParams),
       as: 'data'
+    });
+  }
+
+  getBatchOperationLimit() {
+    return this.request<GetBatchOperationLimitResponse>('GET', 'v2/classifieds/listings/batch', {
+      auth: 'token',
+      as: 'params',
+    });
+  }
+
+  /**
+   * Undocumented V2 api for updating multiple listings in one request.
+   * Does not support archived listings.
+   */
+  updateListingsBatch(params: UpdateListingParam[]) {
+    return this.request<UpdateListingBatchResponse>('PATCH', 'v2/classifieds/listings/batch', {
+      auth: 'token',
+      payload: params,
+      as: 'params'
     });
   }
 
