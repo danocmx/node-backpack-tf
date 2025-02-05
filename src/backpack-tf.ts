@@ -6,6 +6,7 @@ import {
 import { constructSearchParams, SearchParams } from './params/search';
 import { constructDeleteListingsParams } from './params/delete-listings';
 import {
+  AttributeFormat,
   constructCreateListingsParams,
   constructV2CreateListingParams,
   ListingParams,
@@ -445,6 +446,17 @@ export class BackpackTFAPI {
         auth: 'token',
       },
     );
+  }
+
+  /**
+   * Same as {@link createListingsBatch} but with {@link AttributeFormat} format.
+   */
+  createListingsBatchAttribute(params: ListingParams<AttributeFormat>[]) {
+    return this.request<CreateListingBatchResponse>('POST', 'v2/classifieds/listings/batch', {
+      auth: 'token',
+      payload: params,
+      as: 'data'
+    });
   }
 
   /**
