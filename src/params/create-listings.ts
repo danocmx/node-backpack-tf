@@ -29,9 +29,9 @@ export type PriceIndexFormat = {
   priceindex: string;
 };
 
-export type ListingParams<
-  T extends PriceIndexFormat | AttributeFormat = PriceIndexFormat,
-> = {
+export type ListingParamFormat = PriceIndexFormat | AttributeFormat;
+
+export type ListingParams<T extends ListingParamFormat = PriceIndexFormat> = {
   intent: 'sell' | 'buy';
   id?: string;
   item?: T;
@@ -75,9 +75,9 @@ export function constructCreateListingParams(listing: ListingParams) {
   };
 }
 
-export function constructV2CreateListingParams<
-  T extends PriceIndexFormat | AttributeFormat,
->(listing: ListingParams<T>) {
+export function constructV2CreateListingParams<T extends ListingParamFormat>(
+  listing: ListingParams<T>,
+) {
   const item = listing.item;
 
   return {
@@ -107,7 +107,7 @@ export function constructV2CreateListingParams<
 }
 
 function isPriceIndexFormat(
-  item: PriceIndexFormat | AttributeFormat,
+  item: ListingParamFormat,
 ): item is PriceIndexFormat {
   return !('defindex' in item);
 }
