@@ -8,6 +8,7 @@ import { constructDeleteListingsParams } from './params/delete-listings';
 import {
   constructCreateListingsParams,
   constructV2CreateListingParams,
+  ListingParamFormat,
   ListingParams,
 } from './params/create-listings';
 import { constructUserInfoParams, UserInfoParams } from './params/user-info';
@@ -450,12 +451,18 @@ export class BackpackTFAPI {
   /**
    * New V2 api for creating multiple listings in one request.
    */
-  createListingsBatch(params: ListingParams[]) {
-    return this.request<CreateListingBatchResponse>('POST', 'v2/classifieds/listings/batch', {
+  createListingsBatch<T extends ListingParamFormat>(
+    params: ListingParams<T>[],
+  ) {
+    return this.request<CreateListingBatchResponse>(
+      'POST',
+      'v2/classifieds/listings/batch',
+      {
       auth: 'token',
       payload: params.map(constructV2CreateListingParams),
-      as: 'data'
-    });
+        as: 'data',
+      },
+    );
   }
 
   getBatchOperationLimit() {
