@@ -8,8 +8,8 @@ import { constructDeleteListingsParams } from './params/delete-listings';
 import {
   constructCreateListingsParams,
   constructV2CreateListingParams,
+  ListingParamFormat,
   ListingParams,
-  PriceIndexFormat,
 } from './params/create-listings';
 import { constructUserInfoParams, UserInfoParams } from './params/user-info';
 import {
