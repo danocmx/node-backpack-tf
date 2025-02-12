@@ -6,10 +6,10 @@ import {
 import { constructSearchParams, SearchParams } from './params/search';
 import { constructDeleteListingsParams } from './params/delete-listings';
 import {
-  AttributeFormat,
   constructCreateListingsParams,
   constructV2CreateListingParams,
   ListingParams,
+  PriceIndexFormat,
 } from './params/create-listings';
 import { constructUserInfoParams, UserInfoParams } from './params/user-info';
 import {
@@ -449,20 +449,9 @@ export class BackpackTFAPI {
   }
 
   /**
-   * Same as {@link createListingsBatch} but with {@link AttributeFormat} format.
-   */
-  createListingsBatchAttribute(params: ListingParams<AttributeFormat>[]) {
-    return this.request<CreateListingBatchResponse>('POST', 'v2/classifieds/listings/batch', {
-      auth: 'token',
-      payload: params,
-      as: 'data'
-    });
-  }
-
-  /**
    * New V2 api for creating multiple listings in one request.
    */
-  createListingsBatch(params: ListingParams[]) {
+  createListingsBatch<T = PriceIndexFormat>(params: ListingParams<T>[]) {
     return this.request<CreateListingBatchResponse>('POST', 'v2/classifieds/listings/batch', {
       auth: 'token',
       payload: params.map(constructV2CreateListingParams),

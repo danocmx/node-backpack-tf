@@ -73,7 +73,17 @@ export function constructCreateListingParams(listing: ListingParams) {
   };
 }
 
-export function constructV2CreateListingParams(listing: ListingParams) {
+export function constructV2CreateListingParams<T>(listing: ListingParams<T>) {
+  // If the listing is of type AttributeFormat, then we can just return it as is because we don't need to do any conversion.
+  if (
+    (listing as ListingParams<AttributeFormat>).item?.defindex !== undefined
+  ) {
+    return listing as ListingParams<AttributeFormat>;
+  }
+
+  // If no defindex is specified then attribute format won't work so safely assume it's price index.
+  const item = listing.item as PriceIndexFormat;
+
   return {
     offers: listing.offers ? 1 : 0,
     buyout: listing.buyout ? 1 : 0,
@@ -83,11 +93,11 @@ export function constructV2CreateListingParams(listing: ListingParams) {
     ...(listing.intent === 'buy'
       ? {
           intent: 0,
-          item: listing.item && {
-            quality: listing.item.quality,
-            item: listing.item.name,
-            craftable: listing.item.craftable ? 1 : 0,
-            priceindex: listing.item.priceindex,
+          item: item && {
+            quality: item.quality,
+            item: item.name,
+            craftable: item.craftable ? 1 : 0,
+            priceindex: item.priceindex,
           },
         }
       : {
