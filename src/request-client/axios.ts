@@ -20,6 +20,8 @@ export function getAxiosRequest(instance?: AxiosInstance): RequestClient {
   };
 }
 
-function isAxiosError<TResponse>(err: unknown | AxiosError<TResponse>): err is AxiosError<TResponse> {
+function isAxiosError<TResponse>(
+  err: unknown | AxiosError<TResponse>,
+): err is AxiosError<TResponse> {
   return Object.prototype.hasOwnProperty.call(err, 'isAxiosError');
 }

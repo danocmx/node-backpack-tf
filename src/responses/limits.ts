@@ -11,5 +11,5 @@ export type LimitsResponse = {
     twitterFollowerBonus: number;
     acceptedSuggestionBonus: number;
     mvpDonationBonus: number;
-  }
-}
+  };
+};

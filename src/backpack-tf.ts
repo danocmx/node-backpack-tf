@@ -120,7 +120,7 @@ export class BackpackTFAPI {
         url: `https://api.backpack.tf/api/${path}`,
         ...(as === 'data'
           ? { data: { ...payload, ...authStore } }
-          : { params: { ...payload, ...authStore }  }),
+          : { params: { ...payload, ...authStore } }),
       });
     }
 
@@ -130,7 +130,7 @@ export class BackpackTFAPI {
       params: {
         ...payload,
         ...authStore,
-      }
+      },
     });
   }
 
@@ -343,15 +343,11 @@ export class BackpackTFAPI {
   //////////////////////////////////////////////////////////////////////////////////////
 
   getListingArchive(cursor?: CursorParams) {
-    return this.request<GetListingsResponse>(
-      'GET',
-      `v2/classifieds/archive`,
-      {
-        auth: 'token',
-        payload: constructCursorParams(cursor),
-        as: 'params',
-      },
-    );
+    return this.request<GetListingsResponse>('GET', `v2/classifieds/archive`, {
+      auth: 'token',
+      payload: constructCursorParams(cursor),
+      as: 'params',
+    });
   }
 
   deleteListingArchive() {
@@ -420,7 +416,7 @@ export class BackpackTFAPI {
     return this.request<V2Listing>('POST', 'v2/classifieds/listings', {
       auth: 'token',
       payload: constructV2CreateListingParams(params),
-      as: 'data'
+      as: 'data',
     });
   }
 
@@ -458,18 +454,22 @@ export class BackpackTFAPI {
       'POST',
       'v2/classifieds/listings/batch',
       {
-      auth: 'token',
-      payload: params.map(constructV2CreateListingParams),
+        auth: 'token',
+        payload: params.map(constructV2CreateListingParams),
         as: 'data',
       },
     );
   }
 
   getBatchOperationLimit() {
-    return this.request<GetBatchOperationLimitResponse>('GET', 'v2/classifieds/listings/batch', {
-      auth: 'token',
-      as: 'params',
-    });
+    return this.request<GetBatchOperationLimitResponse>(
+      'GET',
+      'v2/classifieds/listings/batch',
+      {
+        auth: 'token',
+        as: 'params',
+      },
+    );
   }
 
   /**
@@ -477,18 +477,22 @@ export class BackpackTFAPI {
    * Does not support archived listings.
    */
   updateListingsBatch(params: UpdateListingParam[]) {
-    return this.request<UpdateListingBatchResponse>('PATCH', 'v2/classifieds/listings/batch', {
-      auth: 'token',
-      payload: params,
-      as: 'params'
-    });
+    return this.request<UpdateListingBatchResponse>(
+      'PATCH',
+      'v2/classifieds/listings/batch',
+      {
+        auth: 'token',
+        payload: params,
+        as: 'params',
+      },
+    );
   }
 
   deleteListingsBatch(ids: string[]) {
     return this.request<V2Listing[]>('POST', 'v2/classifieds/listings/batch', {
       auth: 'token',
       payload: ids,
-      as: 'data'
+      as: 'data',
     });
   }
 
@@ -513,24 +517,16 @@ export class BackpackTFAPI {
   }
 
   getListingLimits() {
-    return this.request<LimitsResponse>(
-      'GET',
-      `classifieds/limits`,
-      {
-        auth: 'token',
-      },
-    );
+    return this.request<LimitsResponse>('GET', `classifieds/limits`, {
+      auth: 'token',
+    });
   }
 
   getListings(cursor?: CursorParams) {
-    return this.request<GetListingsResponse>(
-      'GET',
-      `v2/classifieds/listings`,
-      {
-        auth: 'token',
-        payload: constructCursorParams(cursor),
-        as: 'params',
-      },
-    );
+    return this.request<GetListingsResponse>('GET', `v2/classifieds/listings`, {
+      auth: 'token',
+      payload: constructCursorParams(cursor),
+      as: 'params',
+    });
   }
 }
