@@ -1,6 +1,6 @@
 {
   "name": "backpack.tf-api",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "description": "Backpack.tf wrapper written in typescript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
