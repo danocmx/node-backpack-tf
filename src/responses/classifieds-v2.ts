@@ -37,6 +37,10 @@ export type V2Listing = {
     name: string;
     online: boolean;
   };
+  userAgent?: {
+    lastPulse: number;
+    client: string | '-';
+  };
 };
 
 export type GetListingsResponse = ApiResponse<V2Listing>;
